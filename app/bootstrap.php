@@ -2,6 +2,12 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+// Slim-based router detection hack
+$_SERVER['SCRIPT_NAME'] = __FILE__;
+if (!empty($_REQUEST['path']) && preg_match('/\/' . basename(__FILE__) . '/Ss', $_SERVER['REQUEST_URI'])) {
+    $_SERVER['REQUEST_URI'] = str_replace(basename(__FILE__), ltrim($_REQUEST['path'], '/'), $_SERVER['REQUEST_URI']);
+}
+
 // Instance core & set settings
 $app = new \Slim\App(
     [
@@ -12,6 +18,7 @@ $app = new \Slim\App(
     ]
 );
 $app->post('/images', 'TRLT\Controller\Images:uploadImage');
+$app->get('/ping', 'TRLT\Controller\Ping');
 
 // Logging
 $logger = new \Monolog\Logger('Common logger');

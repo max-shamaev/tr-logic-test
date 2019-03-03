@@ -1,0 +1,18 @@
+version: "2"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "8001:80"
+    links:
+      - fpm
+    volumes:
+      - ./:/var/www/html/
+  fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+      - ./:/var/www/html/
